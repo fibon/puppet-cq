@@ -1,0 +1,190 @@
+	/<%= name %>
+	{
+		/virtualhosts
+		{
+			"<%= domain %>"
+<% if serveraliases.is_a? Array -%>
+<% serveraliases.each do |name| -%>
+			"<%= name %>"
+<% end -%>
+<% elsif serveraliases != '' -%>
+			"<%= serveraliases %>"
+<% end -%>
+		}
+ 
+		/renders
+		{
+<% if instances.is_a? Array -%>
+<% instances.each_with_index  do |url,index| -%>
+			/instance_<%= index %>
+			{
+				/hostname "<%= url.split(':')[0] %>"
+				/port "<%= url.split(':')[1] %>"
+			}
+			"<%= name %>"
+<% end -%>
+<% elsif instances != '' -%>
+			/instance
+			{
+				/hostname "<%= instances.split(':')[0] %>"
+				/port "<%= instances.split(':')[1] %>"
+			}
+<% end -%>
+		}
+ 
+		/filter
+		{
+			/0001
+			{
+				/glob "*"
+				/type "allow"
+			}
+			# restrict access to CMS administration
+			/0002
+			{
+				/glob "* /crx*"
+				/type "allow"
+			}
+			/0003
+			{
+				/glob "* /admin*"
+				/type "deny"
+			}
+			/0004
+			{
+				/glob "* /system*"
+				/type "deny"
+			}
+			/0005
+			{
+				/glob "* /tmp*"
+				/type "deny"
+			}
+			/0006
+			{
+				/glob "* /var*"
+				/type "deny"
+			}
+			/0007
+			{
+				/glob "* /etc*"
+				/type "allow"
+			}
+			/0008
+			{
+				/glob "* /libs*"
+				/type "allow"
+			}
+			/0009
+			{
+				/glob "* /etc/clientlibs*"
+				/type "allow"
+			}
+			/0010
+			{
+				/glob "* /etc/designs*"
+				/type "allow"
+			}
+		
+			/0011
+			{
+				/glob "* /etc/dam*"
+				/type "allow"
+			}
+			/0012
+			{
+				/glob "* /var/dam*"
+				/type "allow"
+			}
+			/0013
+			{
+				/glob "* /tmp/fileupload*"
+				/type "allow"
+			}
+			/0014
+			{
+				/glob "* /etc/tags*"
+				/type "allow"
+			}
+			/0015
+			{
+				/glob "* /etc/replication*"
+				/type "allow"
+			}
+			/0016
+			{
+				/glob "* /bin/wcm/siteadmin*"
+				/type "allow"
+			}
+			/0017
+			{
+				/glob "* /system/sling/logout.html"
+				/type "allow"
+			}
+			/0018
+			{
+				/glob "* /*.jsp *"
+				/type "deny"
+			}
+			/0019
+			{
+				/glob "* /crx/*.jsp *"
+				/type "allow"
+			}
+		}
+
+		/cache
+		{
+			/docroot "<%= cache_dir %>"
+			/statfileslevel "0"
+			/allowAuthorized "1"
+
+			/rules
+			{
+				/0000
+				{
+					/glob "*"
+					/type "deny"
+				}
+				/0001
+				{
+					/glob "/libs/cq/*.css"
+					/type "allow"
+				}
+				/0002
+				{
+					/glob "/libs/cq/*.js"
+					/type "allow"
+				}
+			}
+ 
+			/invalidate
+			{
+				/0000
+				{
+					/glob "*"
+					/type "deny"
+				}
+				/0001
+				{
+					/glob "*.html"
+					/type "allow"
+				}
+			}
+		}
+ 
+		/statistics
+		{
+			/categories
+			{
+				/html
+				{
+					/glob "*.html"
+				}
+				/others
+				{
+					/glob "*"
+				}
+			}
+		}
+	}

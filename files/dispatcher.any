@@ -1,0 +1,4 @@
+/farms
+{
+	$include "*.farm"
+}
